@@ -15,7 +15,8 @@ var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
 var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
 // Select body, append SVG area to it, and set the dimensions
-var svg = d3.select("#currentChooseWeek")
+var svg = d3
+  .select("#currentChooseWeek")
   .append("svg")
   .attr("height", svgHeight)
   .attr("width", svgWidth);
@@ -26,7 +27,7 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
 // Load data from hours-of-tv-watched.csv
-d3.csv("hours-of-tv-watched.csv", function(error, tvData) {
+d3.csv("./resources/hours-of-tv-watched.csv", function(error, tvData) {
 
   // Log an error if one exists
   if (error) return console.warn(error);
