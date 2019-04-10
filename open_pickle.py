@@ -7,7 +7,7 @@ from pymongo import MongoClient
 with open('ny_times_dict.pkl','rb') as handle:
     ny_times = pickle.load(handle)
 
-with open('amazon_prices1.pkl','rb') as handle:
+with open('amazon_prices.pkl','rb') as handle:
     amazon = pickle.load(handle)
 #zip together dictionaries for all books that had valid amazon urls
 good_dicts = []
