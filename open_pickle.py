@@ -41,22 +41,22 @@ for dicts in good_dicts:
     if 'Kindle' in dicts.keys():
         kindle.append(dicts['Kindle'])
     else:
-        dicts['Kindle']=''
+        dicts['Kindle']=float(0)
         kindle.append(dicts['Kindle'])
     if 'Hardcover' in dicts.keys():
         kindle.append(dicts['Hardcover'])
     else:
-        dicts['Hardcover']=''
+        dicts['Hardcover']=float(0)
         kindle.append(dicts['Kindle'])
     if 'Paperback' in dicts.keys():
         kindle.append(dicts['Paperback'])
     else:
-        dicts['Paperback']=''
+        dicts['Paperback']=float(0)
         kindle.append(dicts['Kindle'])
     if 'Audio' in dicts.keys():
         kindle.append(dicts['Kindle'])
     else:
-        dicts['Audio']= ''
+        dicts['Audio']= float(0)
         kindle.append(dicts['Kindle'])
 
 
