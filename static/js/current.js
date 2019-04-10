@@ -33,7 +33,7 @@ d3.csv("static/resources/hours-of-tv-watched.csv", function(error, tvData) {
   if (error) return console.warn(error);
 
   // Print the tvData
-  console.log(tvData);
+  // console.log(tvData);
 
   // Cast the hours value to a number for each piece of tvData
   tvData.forEach(function(data) {

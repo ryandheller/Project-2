@@ -1,12 +1,15 @@
-from flask import Flask, request
+from flask import Flask, request, url_for
 from flask import render_template
 import pymongo
 from pymongo import MongoClient
 import json
 from bson import json_util
 from bson.json_util import dumps
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 
 MONGODB_HOST = 'localhost'
