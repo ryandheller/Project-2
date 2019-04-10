@@ -52,22 +52,34 @@ def read_html_find_price(html_file):
     # count to keep track of where the function is at
     
 # only run the function on valid HTML files (some amazon links no longer exist (less than 5%))
+with open('amazon_prices.pkl','rb') as handle:
+    amazon_prices_grabbed = pickle.load(handle)
+prices_grabbed = []
+for price in amazon_prices_grabbed :
+    price_dict.append(price)
+    prices_grabbed.append(price.get('Title')) 
+
 existing_files = [x for x in glob.glob('htmlFolder/*.html')]
 for files in existing_files[:10]:
+    file_name = files.split('\\')[1].split('.')[0].strip(' ')
     if os.path.getsize(files) > 2500:
-        try:
-            read_html_find_price(files)
-            count +=1
-            print(count)
-        except:''
+        if file_name in prices_grabbed:
+            print('good to go')
+        else:
+            try:
+                read_html_find_price(files)
+                count +=1
+                print(count)
+            except:''
     else:
-        'ignore'
-    
-#pickle the results
-with open('amazon_prices.pkl', 'wb') as f:
-    pickle.dump(price_dict, f, pickle.HIGHEST_PROTOCOL)
+        print('url is not good')
 
-with open('amazon_prices.pkl','rb') as handle:
-    b = pickle.load(handle)
-print(price_dict == b)
+print(len(price_dict))    
+#pickle the results
+# with open('amazon_prices.pkl', 'wb') as f:
+#     pickle.dump(price_dict, f, pickle.HIGHEST_PROTOCOL)
+
+# with open('amazon_prices.pkl','rb') as handle:
+#     b = pickle.load(handle)
+# print(price_dict == b)
 
