@@ -49,14 +49,14 @@ def read_html_find_price(html_file):
             except: ''
         results['Title'] = name
     price_dict.append(results)
-    count += 1
-    print(count)
     
 # only run the function on valid HTML files (some amazon links no longer exist (less than 5%))
 existing_files = [x for x in glob.glob('htmlFolder/*.html')]
 for files in existing_files:
     if os.path.getsize(files) > 2500:
-        read_html_find_price(files)
+        try:
+            read_html_find_price(files)
+        except: ""
     else:
         'ignore'
     

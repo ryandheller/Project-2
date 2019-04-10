@@ -18,7 +18,7 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Import data from an external CSV file
-d3.csv("./resources/authorfake.csv", function(error, smurfData) {
+d3.csv("static/resources/authorfake.csv", function(error, smurfData) {
   if (error) throw error;
 
   console.log(smurfData);

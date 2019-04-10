@@ -28,7 +28,7 @@ var chartGroup = svg.append("g")
 var parseTime = d3.timeParse("%B");
 
 // Load data from miles-walked-this-month.csv
-d3.csv("./resources/miles-walked-this-month.csv", function(error, milesData) {
+d3.csv("static/resources/miles-walked-this-month.csv", function(error, milesData) {
 
   // Throw an error if one occurs
   if (error) throw error;
