@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title Search</title>
+    <title>NYT Bestsellers Analysis</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,19 +11,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
-    <link rel="stylesheet" href="css/titlestyle.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/indexStyle.css')}}">
 
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="col-6">
-            <a class="navbar-brand mb-0 h1" href="index.html">Bestselling Homepage</a>
+            <a class="navbar-brand mb-0 h1" href="{{url_for('index')}}">Bestselling Homepage</a>
         </div>
         <div class="col-3"><button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -32,18 +27,18 @@
             </button></div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="authorsearch.html">Author Search</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('authorSearch')}}">Author Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="titlesearch.html">Title Search</a>
+                    <a class="nav-link" href="{{url_for('titleSearch')}}">Title Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="price.html">Price and Ranking</a>
+                    <a class="nav-link" href="{{url_for('price')}}">Price and Ranking</a>
                 </li>
-
-                <!-- <span
-                class="sr-only">(current)</span> -->
+                
+                <span
+                class="sr-only">(current)</span>
             </ul>
 
         </div>
@@ -54,29 +49,45 @@
         <!-- Heading Row -->
         <div class="row align-items-center my-5">
             <div class="row">
-                <div id="titleSearch">
-                    <!-- This chart will be interactive by search for title or author to display performance over time.  -->
+                <div id="currentChooseWeek">
+                    <!-- There will be a bar-chart here with default current week of best sellers, and a drop down menu 
+                to choose a different week to display. The format of the chart will be x-axis: book title--organized
+                by chart position, y-axis: weeks on chart--filtered by weeks less than and including the displayed
+                date. -->
                 </div>
             </div>
             <!-- /.col-lg-8 -->
+            <div class="col">
+                <h1 class="font-weight-light">NYT Bestseller List Analysis</h1>
+                <p>The above chart is the current NYT Bestseller list, arranged along the x-axis by rank on the list.
+                    Along the y-axis you can see the amount of weeks it has been on the list. Feel free to pick any week
+                    available from the dropdown menu above, to see which books were on the chart then.
+                </p>
+                <h2 class="font-weight-light">Book Performance Over Time</h2>
+                <iframe src="{{url_for('history')}}" height="400" width="1000"></iframe>
+                <p>This chart tracks every book that has been on the bestsellers list over the course of our 8 year
+                    period. </p>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h2 class="font-weight-light">Search By Author or Title This should actually be a link. It should be
+                        centered. maybe there should be a mini pic of graph.</h2>
+                </div>
+                <div class="col">
+                    <h2 class="font-weight-light">Price and Position with same caveats as nextdoor.</h2>
 
+                </div>
+            </div>
             <!-- /.col-md-4 -->
         </div>
-        <div class="col">
-            <h1 class="font-weight-light">Author Search</h1>
-            <p>Find your favorite book here&mdash;or not if it never made the bestsellers chart.
-
-            </p>
-
-        </div>
     </div>
+
     <footer class="py-5 bg-dark">
         <div class="container">
             <p class="m-0 text-center text-white">Created by Ryan Heller & Jarred Armijo &copy; 2019</p>
         </div>
         <!-- /.container -->
     </footer>
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -88,8 +99,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
-    <script src="js/titleSearch.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+        <script src="{{ url_for('static', filename='js/current.js') }}"></script>
 </body>
 
 </html>

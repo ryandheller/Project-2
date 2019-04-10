@@ -27,7 +27,7 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
 // Load data from hours-of-tv-watched.csv
-d3.csv("./resources/hours-of-tv-watched.csv", function(error, tvData) {
+d3.csv("static/resources/hours-of-tv-watched.csv", function(error, tvData) {
 
   // Log an error if one exists
   if (error) return console.warn(error);
