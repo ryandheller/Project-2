@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Author and Title Search</title>
+    <title>Price Comparison</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,6 +12,10 @@
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/authorstyle.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script src="plotly-latest.min.js"></script>
 </head>
 
 <body>
@@ -44,7 +48,6 @@
     </nav>
     <!-- Page Content -->
     <div class="container">
-
         <!-- Heading Row -->
         <div class="row align-items-center my-5">
             <div class="row">
@@ -55,13 +58,20 @@
             </div>
             <!-- /.col-lg-8 -->
             <div class="col">
-                <h1 class="font-weight-light">Price Effect on Chart Performance</h1>
-                <p>Does the price of a book have an effect on how well it sold? What about in different mediums?
+                <h1 class="font-weight-light">Average Amazon Price vs Ranking</h1>
+                <p>Comparing how books at each ranking in the NYT best sellers 
+                    list vary across the four common amazon purchasing options: Audio,
+                    Kindle, Hardback, and Paperback
                 </p>
             
             </div>
             <!-- /.col-md-4 -->
         </div>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+            <div class="col-md-5">
+                    <div id="pie"></div>
+                  </div>
     </div>
     <footer class="py-5 bg-dark">
         <div class="container">

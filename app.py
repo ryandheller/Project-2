@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for
+from flask import Flask, request, url_for, jsonify
 from flask import render_template
 import pymongo
 from pymongo import MongoClient
@@ -51,5 +51,35 @@ def nyt_jsondata():
     connection.close()
     return json_projects
 
+@app.route("/nyt/ranksort")
+def nyt_ranksort():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][COLLECTION_NAME]
+    projects = collection.find(projection=FIELDS)
+    json_projects = []
+    for project in projects:
+        json_projects.append(project)
+    sorted_json = sorted(json_projects, key=lambda k: k['rank']) 
+    # print(sorted_json)
+    json_projects = json.dumps(json_projects, default=json_util.default)
+    connection.close()
+    # return jsonify(authorDict)
+    return jsonify(sorted_json)
+
+@app.route("/nyt/authorsort")
+def nyt_authorsort():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][COLLECTION_NAME]
+    projects = collection.find(projection=FIELDS)
+    json_projects = []
+    for project in projects:
+        json_projects.append(project)
+    sorted_json = sorted(json_projects, key=lambda k: k['author']) 
+    # print(sorted_json)
+    json_projects = json.dumps(json_projects, default=json_util.default)
+    connection.close()
+    # return jsonify(authorDict)
+    return jsonify(sorted_json)
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5000,debug=True)
+    app.run(debug=True)
