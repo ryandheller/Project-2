@@ -24,14 +24,14 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Initial Params
-var chosenXAxis = "hair_length";
+var chosenXAxis = "Kindle";
 
 // function used for updating x-scale var upon click on axis label
-function xScale(hairData, chosenXAxis) {
+function xScale(data, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(hairData, d => d[chosenXAxis]) * 0.8,
-      d3.max(hairData, d => d[chosenXAxis]) * 1.2
+    .domain([d3.min(data, d => d[chosenXAxis]) * 0.8,
+    d3.max(data, d => d[chosenXAxis]) * 1.2
     ])
     .range([0, width]);
 
@@ -74,17 +74,17 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
-    .html(function(d) {
+    .html(function (d) {
       return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
     });
 
   circlesGroup.call(toolTip);
 
-  circlesGroup.on("mouseover", function(data) {
+  circlesGroup.on("mouseover", function (data) {
     toolTip.show(data);
   })
     // onmouseout event
-    .on("mouseout", function(data, index) {
+    .on("mouseout", function (data, index) {
       toolTip.hide(data);
     });
 
@@ -92,25 +92,22 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 }
 
 // Retrieve data from the CSV file and execute everything below
-d3.csv("static/resources/hairData.csv", function(err, hairData) {
-  if (err) throw err;
-
-  // parse data
-  hairData.forEach(function(data) {
-    data.hair_length = +data.hair_length;
-    data.num_hits = +data.num_hits;
-    data.num_albums = +data.num_albums;
+d3.json('/nyt/jsondata', function (error, data) {
+  if (error) throw error;
+  data.forEach(function (book) {
+    book.Kindle = +book.Kindle;
+    book.Audio = +book.Audio;
+    book.Hardcover = +book.Hardcover;
+    book.Paperback = +book.Paperback;
+    book.rank = +book.rank
   });
 
-  // xLinearScale function above csv import
-  var xLinearScale = xScale(hairData, chosenXAxis);
+  var xLinearScale = xScale(data, chosenXAxis);
 
-  // Create y scale function
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(hairData, d => d.num_hits)])
+    .domain([0, d3.max(data, d => d.rank)])
     .range([height, 0]);
 
-  // Create initial axis functions
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
 
@@ -126,11 +123,11 @@ d3.csv("static/resources/hairData.csv", function(err, hairData) {
 
   // append initial circles
   var circlesGroup = chartGroup.selectAll("circle")
-    .data(hairData)
+    .data(data)
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.num_hits))
+    .attr("cy", d => yLinearScale(d.rank))
     .attr("r", 20)
     .attr("fill", "pink")
     .attr("opacity", ".5");
@@ -139,19 +136,33 @@ d3.csv("static/resources/hairData.csv", function(err, hairData) {
   var labelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`);
 
-  var hairLengthLabel = labelsGroup.append("text")
+  var kindleLabel = labelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 20)
-    .attr("value", "hair_length") // value to grab for event listener
+    .attr("value", "Kindle") // value to grab for event listener
     .classed("active", true)
-    .text("Hair Metal Ban Hair Length (inches)");
+    .text("Kindle Price");
 
-  var albumsLabel = labelsGroup.append("text")
+  var audioLabel = labelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 40)
-    .attr("value", "num_albums") // value to grab for event listener
+    .attr("value", "Audio") // value to grab for event listener
     .classed("inactive", true)
-    .text("# of Albums Released");
+    .text("Audiobook Price");
+
+  var hardcoverLabel = labelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 60)
+    .attr("value", "Hardcover") // value to grab for event listener
+    .classed("inactive", true)
+    .text("Hardcover Price");
+
+  var paperbackLabel = labelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 80)
+    .attr("value", "Paperback") // value to grab for event listener
+    .classed("inactive", true)
+    .text("Paperback Price");
 
   // append y axis
   chartGroup.append("text")
@@ -160,14 +171,14 @@ d3.csv("static/resources/hairData.csv", function(err, hairData) {
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .classed("axis-text", true)
-    .text("Number of Billboard 500 Hits");
+    .text("Top Chart Position");
 
   // updateToolTip function above csv import
   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
   // x axis labels event listener
   labelsGroup.selectAll("text")
-    .on("click", function() {
+    .on("click", function () {
       // get value of selection
       var value = d3.select(this).attr("value");
       if (value !== chosenXAxis) {
@@ -179,7 +190,7 @@ d3.csv("static/resources/hairData.csv", function(err, hairData) {
 
         // functions here found above csv import
         // updates x scale for new data
-        xLinearScale = xScale(hairData, chosenXAxis);
+        xLinearScale = xScale(data, chosenXAxis);
 
         // updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
@@ -191,21 +202,59 @@ d3.csv("static/resources/hairData.csv", function(err, hairData) {
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
         // changes classes to change bold text
-        if (chosenXAxis === "num_albums") {
-          albumsLabel
+        if (chosenXAxis === "Kindle") {
+          kindleLabel
             .classed("active", true)
             .classed("inactive", false);
-          hairLengthLabel
+          audioLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          hardcoverLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          paperbackLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        } if (chosenXAxis === "Audio") {
+          audioLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          kindleLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          hardcoverLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          paperbackLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }if (chosenXAxis === "Hardcover") {
+          hardcoverLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          audioLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          kindleLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          paperbackLabel
             .classed("active", false)
             .classed("inactive", true);
         }
         else {
-          albumsLabel
-            .classed("active", false)
-            .classed("inactive", true);
-          hairLengthLabel
+          paperbackLabel
             .classed("active", true)
             .classed("inactive", false);
+          audioLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          hardcoverLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          kindleLabel
+            .classed("active", false)
+            .classed("inactive", true);
         }
       }
     });

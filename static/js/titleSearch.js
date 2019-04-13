@@ -27,6 +27,32 @@ var chartGroup = svg.append("g")
 // Configure a parseTime function which will return a new Date object from a string
 var parseTime = d3.timeParse("%B");
 
+title_list = []
+d3.json("/nyt/titlelist", function(error, data) {
+  if (error) throw error;
+  data.forEach(function(titleItem) {
+    title_list.push(titleItem);
+  })
+});
+
+bookToGraph = []
+
+allBooks = []
+
+
+d3.json("/nyt/titlesort", function(error, data) {
+  if (error) throw error;
+  data.forEach(function(item) {
+    console.log(item)
+  })
+  // data.forEach(function(info) {
+  //   allBooks.push(info)
+  })
+  
+
+  
+
+// })
 // Load data from miles-walked-this-month.csv
 d3.csv("static/resources/miles-walked-this-month.csv", function(error, milesData) {
 
@@ -34,7 +60,7 @@ d3.csv("static/resources/miles-walked-this-month.csv", function(error, milesData
   if (error) throw error;
 
   // Print the milesData
-  console.log(milesData);
+  // console.log(milesData);
 
   // Format the date and cast the miles value to a number
   milesData.forEach(function(data) {

@@ -5,9 +5,9 @@ body {
 }
 
 .bar {
-  fill: orange;
+  fill: rgb(183, 247, 34);
 }
 
 .bar:hover {
-  fill: green;
+  fill: blueviolet;
 }
