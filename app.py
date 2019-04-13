@@ -18,7 +18,7 @@ MONGODB_HOST = 'localhost'
 MONGODB_PORT = 27017
 DBS_NAME = 'NYT_best_sellers'
 COLLECTION_NAME = 'info'
-FIELDS = {'Kindle': True, 'title': True, 'Audio': True, 'Harcover': True, 'Paperback': True, 'rank': True, 'author': True, 'date': True, '_id': False}
+FIELDS = {'Kindle': True, 'title': True, 'Audio': True, 'Hardcover': True, 'Paperback': True, 'rank': True, 'author': True, 'date': True, '_id': False}
 
 
 @app.route("/")
@@ -173,4 +173,4 @@ def nyt_titlelist():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5000,debug=True)
+    app.run(debug=True)
