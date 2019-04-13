@@ -14,7 +14,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/authorstyle.css') }}">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script src="plotly-latest.min.js"></script>
 
 </head>
 
@@ -48,24 +49,38 @@
     </nav>
     <!-- Page Content -->
     <div class="container">
+            <div class="col">
+                    <h1 class="font-weight-light">Author Search</h1>
+                    <p>Search for your favorite author here! Maybe see how each Harry Potter book did? Or find a new great read?
+                    </p>
+                    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                </div>
 
         <!-- Heading Row -->
-        <div class="row align-items-center my-5">
+        <!-- <div class="row align-items-center my-5">
             <div class="row">
-                <div id="authorSearch">
+                <div id="authorSearch"> -->
                    <!-- This chart will be interactive by search for title or author to display performance over time.  -->
                 </div>
             </div>
+            <form >
+            <div class="form-group">
+                <input class="form-control" id="author" type="text" placeholder="John Grisham">
+            </div>
+            <button id="filter-btn" type="submit" class="btn btn-default">Filter Table</button>
+        </form>
             <!-- /.col-lg-8 -->
-            
+            <div class="col-md-5">
+                <div id="pie"></div>
+              </div>
             <!-- /.col-md-4 -->
         </div>
-        <div class="col">
+        <!-- <div class="col">
             <h1 class="font-weight-light">Author Search</h1>
             <p>Search for your favorite author here! Maybe see how each Harry Potter book did? Or find a new great read?
             </p>
-        
-        </div>
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        </div> -->
     </div>
     <footer class="py-5 bg-dark">
         <div class="container">

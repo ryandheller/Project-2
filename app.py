@@ -42,6 +42,18 @@ def price():
     return render_template("price.html")
 
 
+@app.route("/nyt/jsondata")
+def nyt_jsondata():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][COLLECTION_NAME]
+    projects = collection.find(projection=FIELDS)
+    json_projects = []
+    for project in projects:
+        json_projects.append(project)
+    json_projects = json.dumps(json_projects, default=json_util.default)
+    connection.close()
+    return json_projects
+    
 @app.route("/nyt/timesort")
 def nyt_timesort():
     connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
@@ -54,6 +66,20 @@ def nyt_timesort():
     connection.close()
     return json_projects
 
+@app.route("/nyt/ranksort")
+def nyt_ranksort():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][COLLECTION_NAME]
+    projects = collection.find(projection=FIELDS)
+    json_projects = []
+    for project in projects:
+        json_projects.append(project)
+    sorted_json = sorted(json_projects, key=lambda k: k['rank']) 
+    # print(sorted_json)
+    json_projects = json.dumps(json_projects, default=json_util.default)
+    connection.close()
+    # return jsonify(authorDict)
+    return jsonify(sorted_json)
 
 @app.route("/nyt/titlesort")
 def nyt_titlesort():
@@ -113,23 +139,11 @@ def nyt_authorsort():
     for project in projects:
         json_projects.append(project)
     sorted_json = sorted(json_projects, key=lambda k: k['author']) 
-    print(sorted_json)
-    authorDict = defaultdict(list)
-    for row in sorted_json:
-      authorName = row.get('author')
-      if authorDict[authorName]:
-          authorDict[authorName][authorName].append(
-          {'book':row.get('title'),'date':row.get('date'),'rank':row.get('rank')}
-          )
-      else: 
-          authorDict[authorName] = defaultdict(list)
-          authorDict[authorName][authorName].append(
-          {'book':row.get('title'),'date':row.get('date'),'rank':row.get('rank')}
-          )
+    # print(sorted_json)
     json_projects = json.dumps(json_projects, default=json_util.default)
     connection.close()
-    return jsonify(
-       {"data": list(authorDict.values())})
+    # return jsonify(authorDict)
+    return jsonify(sorted_json)
 
 
 @app.route("/nyt/titlecount")

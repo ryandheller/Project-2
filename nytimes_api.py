@@ -7,11 +7,8 @@ from tqdm import tqdm
 import subprocess
 import time
 from datetime import datetime, timedelta
-import csv
 import json
 import glob
-import numpy as np
-import pickle
 
 #access token for api
 api_key = "REVeQu6ErJR69xuO8n21kyuUA0Xt4lV1"
