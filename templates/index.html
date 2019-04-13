@@ -20,7 +20,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="col-6">
-            <a class="navbar-brand mb-0 h1" href="{{url_for('index')}}">Bestselling Homepage</a>
+            <a class="navbar-brand mb-0 h1" href="{{url_for('index')}}">NYT Bestsellers List Charts</a>
         </div>
         <div class="col-3"><button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -60,17 +60,18 @@
             </div>
             <!-- /.col-lg-8 -->
             <div class="col">
-                <h1 class="font-weight-light">NYT Bestseller List Analysis</h1>
-                <p>The above chart is the current NYT Bestseller list, arranged along the x-axis by rank on the list.
-                    Along the y-axis you can see the amount of weeks it has been on the list. Feel free to pick any week
-                    available from the dropdown menu above, to see which books were on the chart then.
+                <h1 class="font-weight-light">NYT Bestseller Weekly Performance</h1>
+                <p>This chart is the current NYT Bestseller list. From left to right, they are in order by rank from 1 to 15.
+                    Vertically, the height of the bar represents the amount of weeks each title has been on the list. Please hover over each bar to see a book's title, author and weeks on the chart.
+                    Feel free to pick any week
+                    available from the dropdown menu, to see which books were on the chart then.
                 </p>
-                <h2 class="font-weight-light">Book Performance Over Time</h2>
+                <!-- <h2 class="font-weight-light">Book Performance Over Time</h2>
                 <iframe src="{{url_for('history')}}" height="400" width="1000"></iframe>
                 <p>This chart tracks every book that has been on the bestsellers list over the course of our 8 year
-                    period. </p>
+                    period. </p> -->
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col">
                     <h2 class="font-weight-light">Search By Author or Title This should actually be a link. It should be
                         centered. maybe there should be a mini pic of graph.</h2>
@@ -79,7 +80,7 @@
                     <h2 class="font-weight-light">Price and Position with same caveats as nextdoor.</h2>
 
                 </div>
-            </div>
+            </div> -->
             <!-- /.col-md-4 -->
         </div>
     </div>
