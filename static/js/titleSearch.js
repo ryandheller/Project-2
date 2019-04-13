@@ -84,7 +84,7 @@ d3.json("/nyt/titlesort", function (error, data) {
       .x(data => xTimeScale(data.date))
       .y(data => yLinearScale(data.rank));
 
-    chartGroup.append("path")
+    var bookPath = chartGroup.append("path")
       // The drawLine function returns the instructions for creating the line for milesData
       .attr("d", drawLine(bookToGraph))
       .classed("line", true);
@@ -102,7 +102,7 @@ d3.json("/nyt/titlesort", function (error, data) {
 
     bookToGraph = []
   }
-  initialGraph("'TIL DEATH DO US PART")
+  initialGraph("44 CHARLES STREET")
 
   var updateGraph = function (bookPick) {
 
@@ -133,14 +133,27 @@ d3.json("/nyt/titlesort", function (error, data) {
       .x(data => xTimeScale(data.date))
       .y(data => yLinearScale(data.rank));
 
-    chartGroup.append("path")
-      // The drawLine function returns the instructions for creating the line for milesData
-      .attr("d", drawLine(bookToGraph))
-      .classed("line", true);
+        
+    
+    chartGroup.selectAll("path.line")
+      .transition().duration(1000).attr("d", drawLine(bookToGraph))
+      // chartGroup.append("path")
+      // .transition
+      // // The drawLine function returns the instructions for creating the line for milesData
+      // .attr("d", drawLine(bookToGraph))
+      // .classed("line", true);
 
+    chartGroup.selectAll("g.axis").remove()
     chartGroup.append("g")
       .classed("axis", true)
       .call(leftAxis);
+
+    // // Append an SVG group element to the SVG area, create the bottom axis inside of it
+    // // Translate the bottom axis to the bottom of the page
+    // chartGroup.append("g")
+    //   .classed("axis", true)
+    //   .attr("transform", "translate(0, " + chartHeight + ")")
+    //   .call(bottomAxis);
 
     // Append an SVG group element to the SVG area, create the bottom axis inside of it
     // Translate the bottom axis to the bottom of the page
