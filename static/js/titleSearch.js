@@ -25,12 +25,13 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Configure a parseTime function which will return a new Date object from a string
-var parseTime = d3.timeParse("%B");
+// var parseTime = d3.timeParse("B%");
+var parseTime = d3.timeParse("%Y-%m-%d");
 
 title_list = []
-d3.json("/nyt/titlelist", function(error, data) {
+d3.json("/nyt/titlelist", function (error, data) {
   if (error) throw error;
-  data.forEach(function(titleItem) {
+  data.forEach(function (titleItem) {
     title_list.push(titleItem);
   })
 });
@@ -40,73 +41,123 @@ bookToGraph = []
 allBooks = []
 
 
-d3.json("/nyt/titlesort", function(error, data) {
+d3.json("/nyt/titlesort", function (error, data) {
   if (error) throw error;
-  data.forEach(function(item) {
-    console.log(item)
+  data.forEach(function (item) {
+    allBooks.push(item)
   })
-  // data.forEach(function(info) {
-  //   allBooks.push(info)
+
+  let titleMenu = d3.select("#titleDropdown")
+  var options = titleMenu
+    .append('select')
+    .selectAll('option')
+    .data(title_list).enter()
+    .append('option')
+    .text(function (d) { return d; });
+
+  var initialGraph = function (bookPick) {
+
+    allBooks.forEach(function (data) {
+      if (data.title == bookPick) {
+        bookToGraph.push(data)
+      }
+    });
+
+    bookToGraph.forEach(function (point) {
+      point.rank = +point.rank;
+      point.date = parseTime(point.date);
+    })
+
+    var xTimeScale = d3.scaleTime()
+      .range([0, chartWidth])
+      .domain(d3.extent(bookToGraph, data => data.date));
+
+    var yLinearScale = d3.scaleLinear()
+      .range([chartHeight, 0])
+      .domain([15, 0]);
+
+    var bottomAxis = d3.axisBottom(xTimeScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
+
+    var drawLine = d3
+      .line()
+      .x(data => xTimeScale(data.date))
+      .y(data => yLinearScale(data.rank));
+
+    chartGroup.append("path")
+      // The drawLine function returns the instructions for creating the line for milesData
+      .attr("d", drawLine(bookToGraph))
+      .classed("line", true);
+
+    chartGroup.append("g")
+      .classed("axis", true)
+      .call(leftAxis);
+
+    // Append an SVG group element to the SVG area, create the bottom axis inside of it
+    // Translate the bottom axis to the bottom of the page
+    chartGroup.append("g")
+      .classed("axis", true)
+      .attr("transform", "translate(0, " + chartHeight + ")")
+      .call(bottomAxis);
+
+    bookToGraph = []
+  }
+  initialGraph("'TIL DEATH DO US PART")
+
+  var updateGraph = function (bookPick) {
+
+    allBooks.forEach(function (data) {
+      if (data.title == bookPick) {
+        bookToGraph.push(data)
+      }
+    });
+
+    bookToGraph.forEach(function (point) {
+      point.rank = +point.rank;
+      point.date = parseTime(point.date);
+    })
+
+    var xTimeScale = d3.scaleTime()
+      .range([0, chartWidth])
+      .domain(d3.extent(bookToGraph, data => data.date));
+
+    var yLinearScale = d3.scaleLinear()
+      .range([chartHeight, 0])
+      .domain([15, 0]);
+
+    var bottomAxis = d3.axisBottom(xTimeScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
+
+    var drawLine = d3
+      .line()
+      .x(data => xTimeScale(data.date))
+      .y(data => yLinearScale(data.rank));
+
+    chartGroup.append("path")
+      // The drawLine function returns the instructions for creating the line for milesData
+      .attr("d", drawLine(bookToGraph))
+      .classed("line", true);
+
+    chartGroup.append("g")
+      .classed("axis", true)
+      .call(leftAxis);
+
+    // Append an SVG group element to the SVG area, create the bottom axis inside of it
+    // Translate the bottom axis to the bottom of the page
+    chartGroup.append("g")
+      .classed("axis", true)
+      .attr("transform", "translate(0, " + chartHeight + ")")
+      .call(bottomAxis);
+
+    bookToGraph = []
+
+  }
+
+  titleMenu.on('change', function () {
+    var selectedBook = d3.select(this)
+      .select('select')
+      .property('value')
+
+    updateGraph(selectedBook)
   })
-  
-
-  
-
-// })
-// Load data from miles-walked-this-month.csv
-d3.csv("static/resources/miles-walked-this-month.csv", function(error, milesData) {
-
-  // Throw an error if one occurs
-  if (error) throw error;
-
-  // Print the milesData
-  // console.log(milesData);
-
-  // Format the date and cast the miles value to a number
-  milesData.forEach(function(data) {
-    data.date = parseTime(data.date);
-    data.miles = +data.miles;
-  });
-
-  // Configure a time scale with a range between 0 and the chartWidth
-  // Set the domain for the xTimeScale function
-  // d3.extent returns the an array containing the min and max values for the property specified
-  var xTimeScale = d3.scaleTime()
-    .range([0, chartWidth])
-    .domain(d3.extent(milesData, data => data.date));
-
-  // Configure a linear scale with a range between the chartHeight and 0
-  // Set the domain for the xLinearScale function
-  var yLinearScale = d3.scaleLinear()
-    .range([chartHeight, 0])
-    .domain([0, d3.max(milesData, data => data.miles)]);
-
-  // Create two new functions passing the scales in as arguments
-  // These will be used to create the chart's axes
-  var bottomAxis = d3.axisBottom(xTimeScale);
-  var leftAxis = d3.axisLeft(yLinearScale);
-
-  // Configure a drawLine function which will use our scales to plot the line's points
-  var drawLine = d3
-    .line()
-    .x(data => xTimeScale(data.date))
-    .y(data => yLinearScale(data.miles));
-
-  // Append an SVG path and plot its points using the line function
-  chartGroup.append("path")
-    // The drawLine function returns the instructions for creating the line for milesData
-    .attr("d", drawLine(milesData))
-    .classed("line", true);
-
-  // Append an SVG group element to the SVG area, create the left axis inside of it
-  chartGroup.append("g")
-    .classed("axis", true)
-    .call(leftAxis);
-
-  // Append an SVG group element to the SVG area, create the bottom axis inside of it
-  // Translate the bottom axis to the bottom of the page
-  chartGroup.append("g")
-    .classed("axis", true)
-    .attr("transform", "translate(0, " + chartHeight + ")")
-    .call(bottomAxis);
-});
+})

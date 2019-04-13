@@ -90,45 +90,12 @@ def nyt_titlesort():
     for project in projects:
         json_projects.append(project)
     sorted_json = sorted(json_projects, key=lambda k: k['title']) 
-    print(sorted_json)
-    titleDict = defaultdict(list)
-    for row in sorted_json:
-        booktitle = row.get('title')
-        if titleDict[booktitle]:
-            titleDict[booktitle]['datapoints'].append(
-                {'x': f"new Date({row.get('date')})", 'y': row.get('rank')}
-            )
-            titleDict[booktitle]['x'].append(
-                row.get('date')
-            )
-            titleDict[booktitle]['y'].append(
-                row.get('rank')
-            )
-        else:
-            titleDict[booktitle] = defaultdict(list)
-            titleDict[booktitle]['datapoints'].append(
-                {'x': f"new Date({row.get('date')})", 'y': row.get('rank')})
-            titleDict[booktitle]['x'].append(
-                row.get('date')
-            )
-            titleDict[booktitle]['y'].append(
-                row.get('rank')
-            )
-
-
-        titleDict[booktitle]['type'] = 'line'
-        titleDict[booktitle]['name'] = booktitle
-        titleDict[booktitle]['axisYType'] = 'secondary'
-        titleDict[booktitle]['markerSize'] = 0
-        titleDict[booktitle]['yValueFormatString'] = '$Y-$m-$d'
-
-
-
+    # print(sorted_json)
     json_projects = json.dumps(json_projects, default=json_util.default)
     connection.close()
-    return jsonify(titleDict)
-    #    {"data": list(titleDict.values())} 
-    #     )
+    # return jsonify(authorDict)
+    return jsonify(sorted_json)
+
 
 @app.route("/nyt/authorsort")
 def nyt_authorsort():
